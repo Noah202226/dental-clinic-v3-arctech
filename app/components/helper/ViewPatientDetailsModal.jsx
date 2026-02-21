@@ -75,7 +75,7 @@ export default function ViewPatientDetailsModal({ patient, isOpen, onClose }) {
 
       // 1. Upload file to Appwrite Storage
       const uploadedFile = await storage.createFile(
-        "profile-image-bucket",
+        process.env.NEXT_PUBLIC_STORAGE_BUCKET_ID,
         ID.unique(),
         file,
       );
@@ -98,7 +98,7 @@ export default function ViewPatientDetailsModal({ patient, isOpen, onClose }) {
 
   // Appwrite Image URL Construction
   const patientImageUrl = updatedPatient.photoFileId
-    ? `https://appwrite.arctech.fun/v1/storage/buckets/profile-image-bucket/files/${updatedPatient.photoFileId}/view?project=manila-dental-arts-v3`
+    ? `https://appwrite.arctech.fun/v1/storage/buckets/${process.env.NEXT_PUBLIC_STORAGE_BUCKET_ID}/files/${updatedPatient.photoFileId}/view?project=${process.env.NEXT_PUBLIC_CLINIC_NAME}`
     : null;
 
   const sectionsLoading =
