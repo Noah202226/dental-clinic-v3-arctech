@@ -35,6 +35,7 @@ export default function ReportsAnalytics() {
     fetchAllPayments();
   }, [fetchAllPayments]);
 
+  console.log(transactions, "TX", fetchAllPayments);
   const allIndividualPayments = useMemo(() => {
     const combined = [
       ...transactions
@@ -82,6 +83,7 @@ export default function ReportsAnalytics() {
   );
   const netRevenue = totalCashReceived - totalExpenses;
 
+  console.log(allIndividualPayments);
   const handleExportPDF = async () => {
     try {
       const { jsPDF } = await import("jspdf");
@@ -329,6 +331,7 @@ export default function ReportsAnalytics() {
                       key={p.id}
                       className="hover:bg-zinc-50 dark:hover:bg-zinc-800/20 transition-colors"
                     >
+                      {console.log(p)}
                       <td className="px-8 py-5">
                         <div className="font-bold text-sm text-zinc-800 dark:text-zinc-200">
                           {p.date.toLocaleDateString()}

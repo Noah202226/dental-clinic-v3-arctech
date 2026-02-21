@@ -126,7 +126,7 @@ export default function InstallmentsModal({ transaction, onClose }) {
           remaining: newRemaining,
           serviceName: transaction.serviceName,
           note: form.note,
-          patientName: transaction.patientName,
+          patientName: `${transaction?.firstName} ${transaction?.middleName}, ${transaction?.lastName}`,
           patientId: transaction.patientId,
         },
       );

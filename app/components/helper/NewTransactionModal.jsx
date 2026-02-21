@@ -78,7 +78,7 @@ export default function NewTransactionModal({ patient, onClose, onSaved }) {
         ID.unique(),
         {
           patientId: patient.$id,
-          patientName: patient.patientName,
+          patientName: `${patient?.firstName} ${patient?.middleName}, ${patient?.lastName}`,
           serviceId: form.serviceId,
           serviceName: form.serviceName,
           totalAmount: Number(form.servicePrice),
@@ -100,7 +100,7 @@ export default function NewTransactionModal({ patient, onClose, onSaved }) {
             amount: Number(form.initialPay),
             dateTransact: new Date().toISOString(),
             patientId: patient.$id,
-            patientName: patient.patientName,
+            patientName: `${patient?.firstName} ${patient?.middleName}, ${patient?.lastName}`,
             serviceName: form.serviceName,
             remaining: Number(form.servicePrice) - Number(form.initialPay),
             note: "Initial payment",
