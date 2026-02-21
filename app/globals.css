@@ -1,0 +1,142 @@
+@import "tailwindcss";
+@plugin "daisyui";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Dynamic Variables - Controlled by BrandingProvider */
+  --theme-color: #9db320; /* Default Clinic Green */
+  --theme-hover: #afd600de;
+  --font-main: var(--font-montserrat), ui-sans-serif, system-ui;
+
+  /* Light Mode - Ultra Modern Clinic Aesthetic */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+
+  /* Toast Variables */
+  --toast-bg: rgba(255, 255, 255, 0.85);
+  --toast-color: #18181b;
+  --toast-border: rgba(0, 0, 0, 0.08);
+
+  /* Modern Radius */
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2.5rem;
+}
+
+.dark {
+  /* Dark Mode - Deep Midnight Slate */
+  /* Note: You had #02772f (green) as background, I kept it as per your snippet */
+  --background: #02772f;
+  --foreground: #f8fafc;
+  --card: #0f172a;
+
+  /* These will be overwritten by JS if a custom color is saved */
+  --theme-color: #34d399;
+  --theme-hover: #10b981;
+
+  /* Toast Variables Dark */
+  --toast-bg: rgba(15, 23, 42, 0.9);
+  --toast-color: #f8fafc;
+  --toast-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Typography Classes */
+[data-font="Mono"] {
+  --font-main: "JetBrains Mono", monospace;
+}
+[data-font="Serif"] {
+  --font-main: "Source Serif 4", serif;
+}
+[data-font="Sans"] {
+  --font-main: var(--font-montserrat), ui-sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  /* The Magic: Tailwind 'primary' now points to our dynamic variable */
+  --color-primary: var(--theme-color);
+  --color-primary-hover: var(--theme-hover);
+  --font-sans: var(--font-main);
+}
+
+/* Global Smooth Transitions */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-main);
+  transition:
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s ease;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* High-Gloss Card */
+.glass-card {
+  @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.08)];
+}
+
+/* Floating Action Button Style */
+.btn-modern {
+  @apply relative overflow-hidden transition-all duration-300 active:scale-95 hover:shadow-lg hover:shadow-primary/20 disabled:opacity-50;
+}
+
+/* DAISYUI OVERRIDES - Using var(--theme-color) for dynamic branding */
+.modal-box {
+  @apply rounded-[var(--radius-2xl)] border border-white/10 shadow-2xl;
+}
+
+.btn-primary {
+  /* Now uses the dynamic theme color instead of hardcoded emerald */
+  background-color: var(--theme-color) !important;
+  @apply border-none text-white font-black uppercase tracking-widest text-[10px] py-4 px-8 transition-all active:scale-95;
+}
+
+.btn-primary:hover {
+  background-color: var(--theme-hover) !important;
+}
+
+.btn-primary {
+  background-color: var(--theme-color) !important;
+  /* Use color-mix to decide if text should be black or white based on theme color */
+  color: #fff;
+}
+
+/* If the color is light yellow, force dark text */
+[data-accent="lightYellow"] .btn-primary {
+  color: #1c1917 !important; /* Dark zinc text */
+}
+.input,
+.select,
+.textarea {
+  @apply bg-zinc-100/50 dark:bg-zinc-800/40 border-zinc-200/50 dark:border-zinc-700/50 transition-all rounded-2xl font-medium;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--theme-color);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-color), transparent 90%);
+}
+
+/* CUSTOM SCROLLBAR */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-300 dark:bg-zinc-700 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--theme-color);
+}
+
+/* Text Selection */
+::selection {
+  background-color: color-mix(in srgb, var(--theme-color), transparent 80%);
+  color: var(--theme-color);
+}
