@@ -2,9 +2,16 @@
 
 import { useState, useEffect } from "react";
 import { databases, ID } from "../../lib/appwrite";
-import { FiX, FiInfo, FiPlusCircle, FiDollarSign } from "react-icons/fi";
+import {
+  FiX,
+  FiInfo,
+  FiPlusCircle,
+  FiDollarSign,
+  FiTrash2,
+} from "react-icons/fi";
 import { useServicesStore } from "@/app/stores/useServicesStore";
 import { notify } from "@/app/lib/notify";
+import { Query } from "appwrite";
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID;
 const COLLECTION_TRANSACTIONS = "transactions";
@@ -115,6 +122,42 @@ export default function NewTransactionModal({ patient, onClose, onSaved }) {
     } catch (err) {
       console.error(err);
       notify.error("Failed to save transaction.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- NEW: DELETE ALL INSTALLMENTS LOGIC ---
+  const handlePurgeInstallments = async () => {
+    const confirmPurge = window.confirm(
+      "WARNING: This will delete ALL installment records in the database. This action cannot be undone. Do you want to proceed?",
+    );
+
+    if (!confirmPurge) return;
+
+    setLoading(true);
+    try {
+      // 1. Fetch all documents (Limit 100 is Appwrite's default max per request)
+      const response = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTION_INSTALLMENTS,
+        [Query.limit(100)],
+      );
+
+      // 2. Map through documents and delete them
+      const deletePromises = response.documents.map((doc) =>
+        databases.deleteDocument(DATABASE_ID, COLLECTION_INSTALLMENTS, doc.$id),
+      );
+
+      await Promise.all(deletePromises);
+
+      notify.success(
+        `Successfully cleared ${response.documents.length} installment records.`,
+      );
+      if (onSaved) onSaved(); // Refresh parent view if needed
+    } catch (err) {
+      console.error("Purge Error:", err);
+      notify.error("Failed to delete records. Check permissions.");
     } finally {
       setLoading(false);
     }
@@ -256,6 +299,19 @@ export default function NewTransactionModal({ patient, onClose, onSaved }) {
               initial entry in the payment schedule.
             </p>
           </div>
+
+          {/* Danger Zone: Purge Button */}
+          {/* <div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-800">
+            <button
+              type="button"
+              onClick={handlePurgeInstallments}
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-red-500/30 text-red-500 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-red-500/10 transition-all disabled:opacity-50"
+            >
+              <FiTrash2 />
+              Purge All Installment Records
+            </button>
+          </div> */}
 
           {/* Actions */}
           <div className="flex gap-3 pt-4 border-t border-zinc-100 dark:border-zinc-800">
