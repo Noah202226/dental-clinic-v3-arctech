@@ -131,7 +131,7 @@ export default function Hero() {
                     >
                       {word}{" "}
                     </span>
-                  )) || "Manila Dental Arts"}
+                  )) || "Arc Tech Solution Dental v3"}
                 </h1>
               </div>
             </div>
@@ -148,7 +148,7 @@ export default function Hero() {
             className="flex flex-col sm:flex-row items-center gap-6"
           >
             <a
-              href="https://appointment-manila-dental-arts-v3.vercel.app/"
+              href={process.env.NEXT_PUBLIC_APPOINTMENT_LINK}
               target="_blank"
               className="group flex items-center gap-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-8 py-5 rounded-full text-lg font-bold shadow-2xl hover:bg-primary dark:hover:bg-primary hover:text-white transition-all hover:-translate-y-1"
             >
@@ -159,7 +159,7 @@ export default function Hero() {
               </span>
             </a>
             <a
-              href="https://www.facebook.com/manila.arts.1"
+              href={process.env.NEXT_PUBLIC_FB_PAGE_LINK}
               target="_blank"
               className="flex items-center gap-2 text-zinc-500 hover:text-primary font-bold transition-colors"
             >

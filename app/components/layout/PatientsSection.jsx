@@ -267,7 +267,7 @@ export default function PatientsSection() {
                           <div className="h-16 w-16 rounded-xl bg-zinc-100 dark:bg-zinc-800 overflow-hidden border border-zinc-200 dark:border-zinc-700 flex-shrink-0">
                             {patient?.photoFileId ? (
                               <img
-                                src={`https://appwrite.arctech.fun/v1/storage/buckets/profile-image-bucket/files/${patient.photoFileId}/view?project=manila-dental-arts-v3`}
+                                src={`https://appwrite.arctech.fun/v1/storage/buckets/${process.env.NEXT_PUBLIC_STORAGE_BUCKET_ID}/files/${patient.photoFileId}/view?project=${process.env.NEXT_PUBLIC_CLINIC_NAME}`}
                                 alt={patient?.patientName}
                                 className="h-full w-full object-cover"
                               />
@@ -353,7 +353,7 @@ export default function PatientsSection() {
                     <div className="h-16 w-16 rounded-2xl bg-zinc-100 dark:bg-zinc-800 overflow-hidden border border-zinc-200 dark:border-zinc-700 flex-shrink-0">
                       {patient?.photoFileId ? (
                         <img
-                          src={`https://appwrite.arctech.fun/v1/storage/buckets/profile-image-bucket/files/${patient.photoFileId}/view?project=manila-dental-arts-v3`}
+                          src={`https://appwrite.arctech.fun/v1/storage/buckets/${process.env.NEXT_PUBLIC_STORAGE_BUCKET_ID}/files/${patient.photoFileId}/view?project=${process.env.NEXT_PUBLIC_CLINIC_NAME}`}
                           alt=""
                           className="h-full w-full object-cover"
                         />
