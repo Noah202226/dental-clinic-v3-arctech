@@ -172,6 +172,8 @@ export default function AppointmentManager() {
     // Set loading for this specific document
     setIsUpdating(event.$id);
 
+    console.log("Selected event:", event);
+
     try {
       const eventDate = new Date(event.date);
 
@@ -224,7 +226,8 @@ export default function AppointmentManager() {
             email: event.email,
             status,
             patientName: event.name || event.title,
-            date: eventDate.toLocaleString(),
+            date: event.date, // Pass the date string
+            time: event.time, // Pass the time string (e.g., "10:00 AM")
             notes: notes || event.notes || "No additional notes.",
           }),
         });

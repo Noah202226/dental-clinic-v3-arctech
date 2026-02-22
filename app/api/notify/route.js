@@ -1,12 +1,19 @@
-// app/api/notify/route.js
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 export async function POST(req) {
   try {
-    const { email, patientName, date, status, notes } = await req.json();
+    const { email, patientName, date, time, status, notes } = await req.json();
 
-    // 1. Create the transporter with explicit Gmail settings
+    // 1. Format the Date beautifully (e.g., "Saturday, February 28, 2026")
+    const formattedDate = new Date(date).toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    // 2. Create the transporter with explicit Gmail settings
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -29,7 +36,7 @@ export async function POST(req) {
     <div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid #eee;">
       
       <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 40px 20px; text-align: center;">
-        <img src="https://your-logo-url.com/logo.png" alt="ARC TECH" style="height: 50px; margin-bottom: 20px;">
+        <img src="https://dental-clinic-v3-arctech.vercel.app/logo.png" alt="ARC TECH" style="height: 50px; margin-bottom: 20px;">
         <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 800; letter-spacing: -0.5px;">
           ${isConfirmed ? "Booking Confirmed!" : "Booking Update"}
         </h1>
@@ -38,12 +45,14 @@ export async function POST(req) {
       <div style="padding: 40px 30px; color: #334155; line-height: 1.8;">
         <p style="font-size: 18px;">Hi <strong>${patientName}</strong>,</p>
         <p style="font-size: 16px;">
-          Great news! Your dental appointment for <span style="color: #10b981; font-weight: 700;">${date}</span> 
+          Great news! Your dental appointment on 
+          <span style="color: #10b981; font-weight: 700;">${formattedDate}</span> at 
+          <span style="color: #10b981; font-weight: 700;">${time}</span> 
           has been <strong>${status.toUpperCase()}</strong> by our team.
         </p>
         
         ${
-          notes
+          notes && notes !== "No additional notes."
             ? `
           <div style="background-color: #f1f5f9; padding: 20px; border-radius: 12px; border-left: 4px solid #10b981; margin: 25px 0;">
             <p style="margin: 0; font-size: 14px; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 5px;">Note from the Doctor:</p>
@@ -90,7 +99,6 @@ export async function POST(req) {
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Nodemailer Error:", error);
-    // This will now return the specific error message to your frontend toast
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
