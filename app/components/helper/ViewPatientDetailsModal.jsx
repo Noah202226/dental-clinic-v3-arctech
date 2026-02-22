@@ -574,6 +574,7 @@ export default function ViewPatientDetailsModal({ patient, isOpen, onClose }) {
           collectionId={activeSection.collectionId}
           patientId={patient.$id}
           onClose={() => setActiveSection(null)}
+          patientName={patient?.patientName}
         />
       )}
       {isConsentModalOpen && (

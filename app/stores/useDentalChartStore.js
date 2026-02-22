@@ -19,79 +19,97 @@ export const useDentalChartStore = create((set, get) => ({
         Query.equal("patientId", String(patientId)),
         Query.limit(100),
       ]);
-
-      // Assuming each document is a record for one tooth (e.g., tooth 45 status)
       set({ items: res.documents, loading: false });
     } catch (err) {
       console.error("Fetch error:", err);
-      set({ items: [] });
-    } finally {
-      set({ loading: false });
+      set({ items: [], loading: false });
     }
   },
 
-  // 📌 Update OR create tooth
-  updateTooth: async (patientId, toothNumber, status, note) => {
-    const tn = String(toothNumber);
-    const items = get().items;
-
-    // check if tooth already exists
-    const existing = items.find((x) => x.toothNumber === tn);
-
-    const data = {
-      status: String(status),
-      // Add new fields to the data object
-      note: String(note),
-    };
-
+  // 📌 Generic Add: Matches SubSectionModal expectations
+  addItem: async (patientId, data) => {
     try {
-      if (existing) {
-        // 👉 update existing tooth
-        await databases.updateDocument(
-          DATABASE_ID,
-          COLLECTION_ID,
-          existing.$id,
-          data, // <--- Use the combined data object
-        );
-      } else {
-        // 👉 create new tooth record
-        await databases.createDocument(
-          DATABASE_ID,
-          COLLECTION_ID,
-          ID.unique(),
-          {
-            patientId: String(patientId),
-            toothNumber: tn,
-            ...data, // <--- Spread the new data fields
-          },
-        );
+      const res = await databases.createDocument(
+        DATABASE_ID,
+        COLLECTION_ID,
+        ID.unique(),
+        {
+          ...data,
+          patientId: String(patientId),
+          toothNumber: String(data.toothNumber), // Force String conversion
+        },
+      );
+      set((state) => ({ items: [...state.items, res] }));
+      return res;
+    } catch (err) {
+      console.error("Add error:", err);
+      throw err;
+    }
+  },
+
+  // 📌 Generic Update: Matches SubSectionModal expectations
+  updateItem: async (itemId, data) => {
+    try {
+      // If toothNumber is in the update payload, ensure it's a string
+      const updatedData = { ...data };
+      if (updatedData.toothNumber) {
+        updatedData.toothNumber = String(updatedData.toothNumber);
       }
 
-      // refresh chart
-      await get().fetchItems(patientId);
+      const res = await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTION_ID,
+        itemId,
+        updatedData,
+      );
+      set((state) => ({
+        items: state.items.map((item) => (item.$id === itemId ? res : item)),
+      }));
+      return res;
     } catch (err) {
       console.error("Update error:", err);
+      throw err;
     }
   },
 
-  // 📌 New: Delete Tooth
-  deleteTooth: async (toothId) => {
-    // Accept the Appwrite document ID
-    set({ loading: true });
+  // 📌 Generic Delete: Matches SubSectionModal expectations
+  deleteItem: async (itemId) => {
     try {
-      await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, toothId);
-      // After deleting, refresh the chart
-      // You'll need the patientId to refetch, or manage state locally
-      // For simplicity, let's assume we pass patientId or find it.
-      // A better way is to filter the items array locally.
+      await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, itemId);
       set((state) => ({
-        items: state.items.filter((item) => item.$id !== toothId),
+        items: state.items.filter((item) => item.$id !== itemId),
       }));
-      toast.success("Tooth record deleted successfully!");
+      toast.success("Tooth record removed");
     } catch (err) {
-      console.error("Delete tooth error:", err);
-      toast.error("Failed to delete tooth record.");
-    } finally {
+      console.error("Delete error:", err);
+      toast.error("Failed to delete record");
+      throw err;
+    }
+  },
+
+  // Add this inside your create((set, get) => ({ ... })) block
+  clearChart: async (patientId) => {
+    set({ loading: true });
+    const { items } = get();
+
+    try {
+      // Delete all documents found for this patient
+      const deletePromises = items.map((item) =>
+        databases.deleteDocument(
+          DATABASE_ID,
+          COLLECTION_ID,
+          item.$id, // Uses the unique document ID from Appwrite
+        ),
+      );
+
+      await Promise.all(deletePromises);
+
+      // Clear local state so the UI updates immediately
+      set({ items: [], loading: false });
+      toast.success("All records cleared for this patient.");
+    } catch (err) {
+      console.error("Clear Error:", err);
+      toast.error("Failed to clear records.");
       set({ loading: false });
     }
   },
