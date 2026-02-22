@@ -15,6 +15,7 @@ import clsx from "clsx";
 import { useBranding } from "../context/BrandingProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { refresh } from "next/cache";
 
 function TopBar() {
   const { current, logout, loading } = useAuthStore();
@@ -202,6 +203,7 @@ function TopBar() {
                 boxShadow: `0 10px 20px -5px ${config?.accentColor || config?.primaryColor}60`,
               }}
             >
+              {console.log(refresh)}
               {/* Initials - Visible by default, hidden on hover */}
               <span className="group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
                 <FiLogOut className="text-primary" size={20} />
