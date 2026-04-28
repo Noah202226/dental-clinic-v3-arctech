@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🧭 Dashboard
 
-## Getting Started
+> Today: {{date}}
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ☀️ Daily Check-in
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Did I move forward today? [ ] Yes [ ] No
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 🔴 Must Do Today
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [ ] Check all clinic leads and reply immediately
+- [ ] Do one thing that moves ArcTech forward
 
-## Learn More
+### 💡 Focus This Week
 
-To learn more about Next.js, take a look at the following resources:
+- [ ] Send 10+ clinic outreach messages
+- [ ] Follow up leads older than 2 days
+- [ ] Apply to 3+ developer jobs
+- [ ] Complete 1 Laracasts module
+- [ ] Convert 1 component to TypeScript
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📊 Current Numbers
 
-## Deploy on Vercel
+| Metric         | Number           |
+| -------------- | ---------------- |
+| MRR            | ₱1,996           |
+| Paying clients | 5                |
+| Active leads   | 11               |
+| Warm leads     | 1 (Auraa Dental) |
+| Jobs applied   | 0                |
+| Laracasts done | 0                |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+> Update these every week
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🏆 Today's Win
+
+> Write one win here — no matter how small.
+
+\_
+
+---
+
+## 🔗 Quick Links
+
+- [[Leads Tracker]]
+- [[Job Applications]]
+- [[Wins List]]
+- [[Laravel Progress]]
+- [[Pricing]]
